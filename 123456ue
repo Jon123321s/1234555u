@@ -1,0 +1,88 @@
+#include <iostream>
+#include <map>
+using namespace std;
+
+// Функция для преобразования римской цифры в целое число
+int romanToInt(string s) {
+    // Создаем словарь, в котором хранятся соответствия римских цифр и их значения
+    map<char, int> romanValues;
+    romanValues['I'] = 1;
+    romanValues['V'] = 5;
+    romanValues['X'] = 10;
+    romanValues['L'] = 50;
+    romanValues['C'] = 100;
+    romanValues['D'] = 500;
+    romanValues['M' ]= 1000;
+    
+    int result = 0;
+    int n = s.size();
+    
+    // Обходим все символы римской цифры
+    for (int i = 0; i < n; i++) {
+        // Проверяем, есть ли в словаре значение для текущего символа
+        if (romanValues.find(s[i]) != romanValues.end()) {
+            // Если следующий символ имеет большее значение, то происходит вычитание
+            if (i + 1 < n && romanValues[s[i]] < romanValues[s[i + 1]]) {
+                result -= romanValues[s[i]];
+            }
+            else {
+                result += romanValues[s[i]];
+            }
+        }
+        else {
+            cout << "Некорректная римская цифра!" << endl;
+            return 0;
+        }
+    }
+    
+    return result;
+}
+
+// Функция для преобразования целого числа в римскую цифру
+string intToRoman(int num) {
+    // Создаем словарь, в котором хранятся соответствия значений и римских цифр
+    map<int, string> romanValues;
+    romanValues[1] = "I";
+    romanValues[4] = "IV";
+    romanValues[5] = "V";
+    romanValues[9] = "IX";
+    romanValues[10] = "X";
+    romanValues[40] = "XL";
+    romanValues[50] = "L";
+    romanValues[90] = "XC";
+    romanValues[100] = "C";
+    romanValues[400] = "CD";
+    romanValues[500] = "D";
+    romanValues[900] = "CM";
+    romanValues[1000] = "M";
+    
+    string result = "";
+    
+    // Обходим словарь в обратном порядке
+    for (auto it = romanValues.rbegin(); it != romanValues.rend(); it++) {
+        // Пока число больше текущего значения, добавляем соответствующую римскую цифру
+        while (num >= it->first) {
+            result += it->second;
+            num -= it->first;
+        }
+    }
+    
+    return result;
+}
+
+int main() {
+    string romanNumeral = "XXVII";
+    int number = romanToInt(romanNumeral);
+    cout << "Результат преобразования римской цифры в число: " << number << endl;
+    
+    int num = 27;
+    string roman = intToRoman(num);
+    cout << "Результат преобразования числа в римскую цифру: " << roman << endl;
+    
+    return 0;
+}
+
+
+
+
+
